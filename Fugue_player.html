@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小フーガ ト短調</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    #main-menu, #play-screen {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .visible {
+      display: flex !important;
+    }
+    button {
+      font-size: 1.8em;
+      padding: 1em 2em;
+      margin: 1em;
+      border-radius: 10px;
+      border: none;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+    }
+    #back-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 0.8em;
+      padding: 0.5em 1em;
+      opacity: 0.5;
+      background-color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div id="main-menu" class="visible">
+    <h1>小フーガ ト短調</h1>
+    <button onclick="openPlayScreen(1)">コーラス1</button>
+    <button onclick="openPlayScreen(2)">コーラス2</button>
+    <button onclick="openPlayScreen(3)">コーラス3</button>
+    <button onclick="openPlayScreen(4)">コーラス4</button>
+    <button onclick="openPlayScreen(5)">コーラス5</button>
+  </div>
+
+  <div id="play-screen">
+    <button id="back-button" onmousedown="startHold()" onmouseup="cancelHold()" onmouseleave="cancelHold()">戻る</button>
+    <button id="play-button" onclick="playChorus()">▶ 再生</button>
+  </div>
+
+  <audio id="audio"></audio>
+
+  <script>
+    const audioFiles = {
+      1: 'chorus1.mp3',
+      2: 'chorus2.mp3',
+      3: 'chorus3.mp3',
+      4: 'chorus4.mp3',
+      5: 'chorus5.mp3'
+    };
+
+    let currentChorus = 1;
+    let holdTimeout;
+
+    function openPlayScreen(chorusNumber) {
+      currentChorus = chorusNumber;
+      document.getElementById('main-menu').classList.remove('visible');
+      document.getElementById('play-screen').classList.add('visible');
+    }
+
+    function playChorus() {
+      const audio = document.getElementById('audio');
+      audio.src = audioFiles[currentChorus];
+      audio.play();
+    }
+
+    function startHold() {
+      holdTimeout = setTimeout(() => {
+        const audio = document.getElementById('audio');
+        audio.pause();           // 再生を停止
+        audio.currentTime = 0;   // 再生位置をリセット
+
+        document.getElementById('play-screen').classList.remove('visible');
+        document.getElementById('main-menu').classList.add('visible');
+      }, 1000); // 長押し：1秒
+    }
+
+    function cancelHold() {
+      clearTimeout(holdTimeout);
+    }
+  </script>
+</body>
+</html>
