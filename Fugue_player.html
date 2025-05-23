@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>小フーガ ト短調</title>
+  <title>小フーガ ト短調（5小節ごと再生）</title>
   <style>
     body {
       margin: 0;
@@ -24,9 +24,9 @@
       display: flex !important;
     }
     button {
-      font-size: 1.8em;
+      font-size: 1.5em;
       padding: 1em 2em;
-      margin: 1em;
+      margin: 0.5em;
       border-radius: 10px;
       border: none;
       background-color: #333;
@@ -42,47 +42,45 @@
       opacity: 0.5;
       background-color: #999;
       z-index: 10;
-
     }
   </style>
 </head>
 <body>
   <div id="main-menu" class="visible">
-    <h1>小フーガ ト短調</h1>
-    <button onclick="openPlayScreen(1)">コーラス1</button>
-    <button onclick="openPlayScreen(2)">コーラス2</button>
-    <button onclick="openPlayScreen(3)">コーラス3</button>
-    <button onclick="openPlayScreen(4)">コーラス4</button>
-    <button onclick="openPlayScreen(5)">コーラス5</button>
+    <h1>小フーガ ト短調<br>（5小節ごと）</h1>
+    <!-- 動的に生成 -->
   </div>
 
   <div id="play-screen">
     <button id="back-button" onclick="goBack()">戻る</button>
-    <button id="play-button" onclick="playChorus()">▶ 再生</button>
+    <button id="play-button" onclick="playPhrase()">▶ 再生</button>
   </div>
 
   <audio id="audio"></audio>
 
   <script>
-    const audioFiles = {
-      1: 'chorus1.mp3',
-      2: 'chorus2.mp3',
-      3: 'chorus3.mp3',
-      4: 'chorus4.mp3',
-      5: 'chorus5.mp3'
-    };
+    const phrases = Array.from({ length: 15 }, (_, i) => `bar5bpm80_phrase_${String(i + 1).padStart(2, '0')}.mp3`);
 
-    let currentChorus = 1;
+    let currentPhrase = 0;
 
-    function openPlayScreen(chorusNumber) {
-      currentChorus = chorusNumber;
+    // フレーズ選択ボタン生成
+    const menu = document.getElementById("main-menu");
+    phrases.forEach((file, i) => {
+      const btn = document.createElement("button");
+      btn.textContent = `フレーズ ${i + 1}`;
+      btn.onclick = () => openPlayScreen(i);
+      menu.appendChild(btn);
+    });
+
+    function openPlayScreen(index) {
+      currentPhrase = index;
       document.getElementById('main-menu').classList.remove('visible');
       document.getElementById('play-screen').classList.add('visible');
     }
 
-    function playChorus() {
+    function playPhrase() {
       const audio = document.getElementById('audio');
-      audio.src = audioFiles[currentChorus];
+      audio.src = phrases[currentPhrase];
       audio.play();
     }
 
@@ -90,7 +88,6 @@
       const audio = document.getElementById('audio');
       audio.pause();
       audio.currentTime = 0;
-
       document.getElementById('play-screen').classList.remove('visible');
       document.getElementById('main-menu').classList.add('visible');
     }
