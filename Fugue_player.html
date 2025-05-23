@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -55,7 +55,7 @@
   </div>
 
   <div id="play-screen">
-    <button id="back-button" onmousedown="startHold()" onmouseup="cancelHold()" onmouseleave="cancelHold()">戻る</button>
+    <button id="back-button" onclick="goBack()">戻る</button>
     <button id="play-button" onclick="playChorus()">▶ 再生</button>
   </div>
 
@@ -71,7 +71,6 @@
     };
 
     let currentChorus = 1;
-    let holdTimeout;
 
     function openPlayScreen(chorusNumber) {
       currentChorus = chorusNumber;
@@ -85,19 +84,13 @@
       audio.play();
     }
 
-    function startHold() {
-      holdTimeout = setTimeout(() => {
-        const audio = document.getElementById('audio');
-        audio.pause();           // 再生を停止
-        audio.currentTime = 0;   // 再生位置をリセット
+    function goBack() {
+      const audio = document.getElementById('audio');
+      audio.pause();
+      audio.currentTime = 0;
 
-        document.getElementById('play-screen').classList.remove('visible');
-        document.getElementById('main-menu').classList.add('visible');
-      }, 1000); // 長押し：1秒
-    }
-
-    function cancelHold() {
-      clearTimeout(holdTimeout);
+      document.getElementById('play-screen').classList.remove('visible');
+      document.getElementById('main-menu').classList.add('visible');
     }
   </script>
 </body>
