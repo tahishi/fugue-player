@@ -11,7 +11,9 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
-      background-color: #f4f4f4;
+      background: url("organ_bg.png") no-repeat center center fixed;
+      background-size: cover;
+      user-select: none; /* ← 全体でテキスト選択を無効化 */
     }
     #main-menu, #play-screen {
       display: none;
@@ -19,6 +21,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      backdrop-filter: brightness(0.9);
     }
     .visible {
       display: flex !important;
@@ -29,9 +32,10 @@
       margin: 0.5em;
       border-radius: 10px;
       border: none;
-      background-color: #333;
+      background-color: rgba(0,0,0,0.8);
       color: white;
       cursor: pointer;
+      user-select: none;
     }
     #back-button {
       position: absolute;
@@ -43,27 +47,41 @@
       background-color: #999;
       z-index: 10;
     }
+    #play-button {
+      width: 120px;
+      height: 120px;
+      border-radius: 60px;
+      background-color: #333;
+      background-image: url('play_icon.svg'); /* ▶マーク画像（任意） */
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 50%;
+      font-size: 0; /* テキスト非表示 */
+      border: none;
+    }
   </style>
 </head>
 <body>
   <div id="main-menu" class="visible">
-    <h1>小フーガ ト短調<br>（5小節ごと）</h1>
-    <!-- 動的に生成 -->
+    <h1 style="color:white; text-shadow: 1px 1px 4px black;">小フーガ ト短調<br>（5小節ごと）</h1>
+    <!-- ボタンはJSで生成 -->
   </div>
 
   <div id="play-screen">
     <button id="back-button" onclick="goBack()">戻る</button>
-    <button id="play-button" onclick="playPhrase()">▶ 再生</button>
+    <button id="play-button" onclick="playPhrase()" aria-label="再生"></button>
   </div>
 
   <audio id="audio"></audio>
 
   <script>
-    const phrases = Array.from({ length: 15 }, (_, i) => `bar5bpm80_phrase_${String(i + 1).padStart(2, '0')}.mp3`);
+    const phrases = Array.from({ length: 15 }, (_, i) =>
+      `bar5bpm80_phrase_${String(i + 1).padStart(2, '0')}.mp3`
+    );
 
     let currentPhrase = 0;
 
-    // フレーズ選択ボタン生成
+    // ボタンを動的に生成
     const menu = document.getElementById("main-menu");
     phrases.forEach((file, i) => {
       const btn = document.createElement("button");
