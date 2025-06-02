@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>小フーガ ト短調（フレーズ1）</title>
+  <title>小フーガ ト短調（色選択 + フレーズ1）</title>
   <style>
     html, body {
       margin: 0;
@@ -12,8 +12,8 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      background: url("organ_bg.png") no-repeat center center fixed;
-      background-size: cover;
+      background-color: white;
+      transition: background-color 1s ease;
       user-select: none;
     }
 
@@ -23,23 +23,24 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      backdrop-filter: brightness(0.9);
     }
 
     .visible {
       display: flex !important;
     }
 
-    button {
-      font-size: 1.5em;
-      padding: 1em 2em;
-      margin: 0.5em;
-      border-radius: 10px;
-      border: none;
-      background-color: rgba(0, 0, 0, 0.8);
-      color: white;
+    .color-picker {
+      display: flex;
+      gap: 10px;
+      margin: 1em;
+    }
+
+    .color-option {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid white;
       cursor: pointer;
-      user-select: none;
     }
 
     #back-button {
@@ -72,14 +73,22 @@
       height: 0;
       border-top: 60px solid transparent;
       border-bottom: 60px solid transparent;
-      border-left: 90px solid white;
-      opacity: 0.85;
+      border-left: 90px solid black;
+      opacity: 0.8;
     }
   </style>
 </head>
 <body>
   <div id="main-menu" class="visible">
-    <h1 style="color:white; text-shadow: 1px 1px 4px black;">小フーガ ト短調<br>フレーズ1</h1>
+    <h1>小フーガ ト短調<br>フレーズ1</h1>
+    <p>背景色を選んでください：</p>
+    <div class="color-picker">
+      <div class="color-option" style="background-color: #e74c3c;" onclick="selectColor('#e74c3c')"></div>
+      <div class="color-option" style="background-color: #3498db;" onclick="selectColor('#3498db')"></div>
+      <div class="color-option" style="background-color: #2ecc71;" onclick="selectColor('#2ecc71')"></div>
+      <div class="color-option" style="background-color: #f1c40f;" onclick="selectColor('#f1c40f')"></div>
+      <div class="color-option" style="background-color: #9b59b6;" onclick="selectColor('#9b59b6')"></div>
+    </div>
     <button onclick="openPlayScreen()">フレーズ1 ▶</button>
   </div>
 
@@ -92,22 +101,49 @@
 
   <script>
     const phraseFile = "bar5bpm80_phrase_01.mp3";
+    let selectedColor = '#ffffff';
+    let flashingInterval = null;
+    let flashing = false;
+
+    function selectColor(color) {
+      selectedColor = color;
+    }
 
     function openPlayScreen() {
       document.getElementById('main-menu').classList.remove('visible');
       document.getElementById('play-screen').classList.add('visible');
+      document.body.style.backgroundColor = 'white';
     }
 
     function playPhrase() {
       const audio = document.getElementById('audio');
       audio.src = phraseFile;
       audio.play();
+      startFlashing();
+      audio.onended = stopFlashing;
+    }
+
+    function startFlashing() {
+      if (flashing) return;
+      flashing = true;
+      let white = true;
+      flashingInterval = setInterval(() => {
+        document.body.style.backgroundColor = white ? selectedColor : 'white';
+        white = !white;
+      }, 2000);
+    }
+
+    function stopFlashing() {
+      flashing = false;
+      clearInterval(flashingInterval);
+      document.body.style.backgroundColor = 'white';
     }
 
     function goBack() {
       const audio = document.getElementById('audio');
       audio.pause();
       audio.currentTime = 0;
+      stopFlashing();
       document.getElementById('play-screen').classList.remove('visible');
       document.getElementById('main-menu').classList.add('visible');
     }
