@@ -5,12 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>小フーガ ト短調（5小節ごと再生）</title>
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
       font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
+      height: 100%;
       background: url("organ_bg.png") no-repeat center center fixed;
       background-size: cover;
       user-select: none;
@@ -18,7 +17,7 @@
 
     #main-menu, #play-screen {
       display: none;
-      flex: 1;
+      height: 100%;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -47,32 +46,32 @@
       left: 10px;
       font-size: 0.8em;
       padding: 0.5em 1em;
-      opacity: 0.5;
       background-color: #999;
-      z-index: 10;
+      opacity: 0.6;
+      z-index: 100;
     }
 
     #play-button {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background-color: #333;
+      width: 100vw;
+      height: 100vh;
       border: none;
+      background: none;
       position: relative;
       cursor: pointer;
     }
 
-    /* ▶ をCSSで描画 */
     #play-button::before {
       content: '';
       position: absolute;
-      left: 38%;
-      top: 28%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
       width: 0;
       height: 0;
-      border-top: 20px solid transparent;
-      border-bottom: 20px solid transparent;
-      border-left: 30px solid white;
+      border-top: 60px solid transparent;
+      border-bottom: 60px solid transparent;
+      border-left: 90px solid white;
+      opacity: 0.85;
     }
   </style>
 </head>
@@ -95,7 +94,6 @@
 
     let currentPhrase = 0;
 
-    // ボタン生成
     const menu = document.getElementById("main-menu");
     phrases.forEach((_, i) => {
       const btn = document.createElement("button");
