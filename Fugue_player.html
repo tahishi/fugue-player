@@ -62,11 +62,24 @@
       position: absolute;
       top: 10px;
       left: 10px;
-      font-size: 0.8em;
-      padding: 0.5em 1em;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
       background-color: #999;
       opacity: 0.6;
       z-index: 100;
+      border: none;
+      cursor: pointer;
+    }
+
+    #back-button::before {
+      content: '\2190'; /* ← Unicode 左向き矢印 */
+      font-size: 20px;
+      color: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
 
     #play-button {
@@ -108,7 +121,7 @@
   </div>
 
   <div id="play-screen">
-    <button id="back-button" onclick="goBack()">戻る</button>
+    <button id="back-button" onclick="goBack()" aria-label="戻る"></button>
     <button id="play-button" onclick="playPhrase()" aria-label="再生"></button>
   </div>
 
