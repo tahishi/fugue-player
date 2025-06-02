@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>小フーガ ト短調（色選択 + フレーズ1）</title>
   <style>
     html, body {
@@ -49,7 +49,7 @@
     }
 
     .color-option.selected::after {
-      content: '\2713';
+      content: '✓';
       position: absolute;
       top: 50%;
       left: 50%;
@@ -70,10 +70,11 @@
       z-index: 100;
       border: none;
       cursor: pointer;
+      user-select: none;
     }
 
     #back-button::before {
-      content: '\2190'; /* ← Unicode 左向き矢印 */
+      content: '←';
       font-size: 20px;
       color: white;
       position: absolute;
