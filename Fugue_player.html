@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>小フーガ ト短調（色選択 + フレーズ1）</title>
+  <title>小フーガ ト短調 第１フレーズ再生アプリ</title>
   <style>
     html, body {
       margin: 0;
@@ -15,6 +15,7 @@
       background-color: white;
       transition: background-color 1s ease;
       user-select: none;
+      box-sizing: border-box;
     }
 
     #main-menu, #play-screen {
@@ -105,12 +106,18 @@
       border-left: 90px solid black;
       opacity: 0.8;
     }
+
+    .border-flash {
+      outline: 10px solid transparent;
+      outline-offset: -10px;
+      transition: outline-color 1s ease;
+    }
   </style>
 </head>
 <body>
   <div id="main-menu" class="visible">
-    <h1>小フーガ ト短調<br>フレーズ1</h1>
-    <p>背景色を選んでください：</p>
+    <h1>小フーガ ト短調<br>第１フレーズ再生アプリ</h1>
+    <p>背景色を選んでください</p>
     <div class="color-picker">
       <div class="color-option" style="background-color: #e74c3c;" onclick="selectColor(this, '#e74c3c')"></div>
       <div class="color-option" style="background-color: #3498db;" onclick="selectColor(this, '#3498db')"></div>
@@ -118,6 +125,12 @@
       <div class="color-option" style="background-color: #f1c40f;" onclick="selectColor(this, '#f1c40f')"></div>
       <div class="color-option" style="background-color: #9b59b6;" onclick="selectColor(this, '#9b59b6')"></div>
     </div>
+    <p>選んだ色が点滅しながら音楽を再生します。</p>
+    <p>
+      表示方法：
+      <label><input type="radio" name="displayMode" value="flash" checked> 点滅</label>
+      <label><input type="radio" name="displayMode" value="border"> 枠表示</label>
+    </p>
     <button onclick="openPlayScreen()">フレーズ1 ▶</button>
   </div>
 
@@ -133,6 +146,7 @@
     let selectedColor = '#ffffff';
     let flashingInterval = null;
     let flashing = false;
+    let displayMode = 'flash';
 
     function selectColor(element, color) {
       document.querySelectorAll('.color-option').forEach(el => el.classList.remove('selected'));
@@ -141,9 +155,13 @@
     }
 
     function openPlayScreen() {
+      const modeRadios = document.getElementsByName('displayMode');
+      modeRadios.forEach(r => { if (r.checked) displayMode = r.value });
+
       document.getElementById('main-menu').classList.remove('visible');
       document.getElementById('play-screen').classList.add('visible');
       document.body.style.backgroundColor = 'white';
+      document.body.classList.remove('border-flash');
     }
 
     function playPhrase() {
@@ -159,7 +177,12 @@
       flashing = true;
       let white = true;
       flashingInterval = setInterval(() => {
-        document.body.style.backgroundColor = white ? selectedColor : 'white';
+        if (displayMode === 'flash') {
+          document.body.style.backgroundColor = white ? selectedColor : 'white';
+        } else {
+          document.body.classList.add('border-flash');
+          document.body.style.outlineColor = white ? selectedColor : 'transparent';
+        }
         white = !white;
       }, 2000);
     }
@@ -168,6 +191,8 @@
       flashing = false;
       clearInterval(flashingInterval);
       document.body.style.backgroundColor = 'white';
+      document.body.classList.remove('border-flash');
+      document.body.style.outlineColor = 'transparent';
     }
 
     function goBack() {
