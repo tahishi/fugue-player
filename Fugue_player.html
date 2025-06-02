@@ -13,8 +13,9 @@
       height: 100vh;
       background: url("organ_bg.png") no-repeat center center fixed;
       background-size: cover;
-      user-select: none; /* ← 全体でテキスト選択を無効化 */
+      user-select: none;
     }
+
     #main-menu, #play-screen {
       display: none;
       flex: 1;
@@ -23,20 +24,23 @@
       align-items: center;
       backdrop-filter: brightness(0.9);
     }
+
     .visible {
       display: flex !important;
     }
+
     button {
       font-size: 1.5em;
       padding: 1em 2em;
       margin: 0.5em;
       border-radius: 10px;
       border: none;
-      background-color: rgba(0,0,0,0.8);
+      background-color: rgba(0, 0, 0, 0.8);
       color: white;
       cursor: pointer;
       user-select: none;
     }
+
     #back-button {
       position: absolute;
       top: 10px;
@@ -47,24 +51,34 @@
       background-color: #999;
       z-index: 10;
     }
+
     #play-button {
-      width: 120px;
-      height: 120px;
-      border-radius: 60px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
       background-color: #333;
-      background-image: url('play_icon.svg'); /* ▶マーク画像（任意） */
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 50%;
-      font-size: 0; /* テキスト非表示 */
       border: none;
+      position: relative;
+      cursor: pointer;
+    }
+
+    /* ▶ をCSSで描画 */
+    #play-button::before {
+      content: '';
+      position: absolute;
+      left: 38%;
+      top: 28%;
+      width: 0;
+      height: 0;
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+      border-left: 30px solid white;
     }
   </style>
 </head>
 <body>
   <div id="main-menu" class="visible">
     <h1 style="color:white; text-shadow: 1px 1px 4px black;">小フーガ ト短調<br>（5小節ごと）</h1>
-    <!-- ボタンはJSで生成 -->
   </div>
 
   <div id="play-screen">
@@ -81,9 +95,9 @@
 
     let currentPhrase = 0;
 
-    // ボタンを動的に生成
+    // ボタン生成
     const menu = document.getElementById("main-menu");
-    phrases.forEach((file, i) => {
+    phrases.forEach((_, i) => {
       const btn = document.createElement("button");
       btn.textContent = `フレーズ ${i + 1}`;
       btn.onclick = () => openPlayScreen(i);
