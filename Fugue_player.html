@@ -41,6 +41,21 @@
       border-radius: 50%;
       border: 2px solid white;
       cursor: pointer;
+      position: relative;
+    }
+
+    .color-option.selected {
+      border: 4px solid black;
+    }
+
+    .color-option.selected::after {
+      content: '\2713';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 24px;
     }
 
     #back-button {
@@ -83,11 +98,11 @@
     <h1>小フーガ ト短調<br>フレーズ1</h1>
     <p>背景色を選んでください：</p>
     <div class="color-picker">
-      <div class="color-option" style="background-color: #e74c3c;" onclick="selectColor('#e74c3c')"></div>
-      <div class="color-option" style="background-color: #3498db;" onclick="selectColor('#3498db')"></div>
-      <div class="color-option" style="background-color: #2ecc71;" onclick="selectColor('#2ecc71')"></div>
-      <div class="color-option" style="background-color: #f1c40f;" onclick="selectColor('#f1c40f')"></div>
-      <div class="color-option" style="background-color: #9b59b6;" onclick="selectColor('#9b59b6')"></div>
+      <div class="color-option" style="background-color: #e74c3c;" onclick="selectColor(this, '#e74c3c')"></div>
+      <div class="color-option" style="background-color: #3498db;" onclick="selectColor(this, '#3498db')"></div>
+      <div class="color-option" style="background-color: #2ecc71;" onclick="selectColor(this, '#2ecc71')"></div>
+      <div class="color-option" style="background-color: #f1c40f;" onclick="selectColor(this, '#f1c40f')"></div>
+      <div class="color-option" style="background-color: #9b59b6;" onclick="selectColor(this, '#9b59b6')"></div>
     </div>
     <button onclick="openPlayScreen()">フレーズ1 ▶</button>
   </div>
@@ -105,7 +120,9 @@
     let flashingInterval = null;
     let flashing = false;
 
-    function selectColor(color) {
+    function selectColor(element, color) {
+      document.querySelectorAll('.color-option').forEach(el => el.classList.remove('selected'));
+      element.classList.add('selected');
       selectedColor = color;
     }
 
